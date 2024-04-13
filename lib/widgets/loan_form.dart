@@ -35,21 +35,18 @@ class _LoanFormState extends State<LoanForm> {
       final result = await _apiService.requestLoanDecision(
           _nationalId, _loanAmount, _loanPeriod);
       setState(() {
-        int tempAmount = int.parse(result['loanAmount'].toString());
-        int tempPeriod = int.parse(result['loanPeriod'].toString());
+        var errorMessage = result['errorMessage'].toString();
 
-        if (tempAmount <= _loanAmount || tempPeriod > _loanPeriod) {
+        if (errorMessage == ""){
           _loanAmountResult = int.parse(result['loanAmount'].toString());
           _loanPeriodResult = int.parse(result['loanPeriod'].toString());
+          _errorMessage = "";
         } else {
-          _loanAmountResult = _loanAmount;
-          _loanPeriodResult = _loanPeriod;
+          _loanAmountResult = 0;
+          _loanPeriodResult = 0;
+          _errorMessage = errorMessage;
         }
-        _errorMessage = result['errorMessage'].toString();
       });
-    } else {
-      _loanAmountResult = 0;
-      _loanPeriodResult = 0;
     }
   }
 
